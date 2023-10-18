@@ -2,3 +2,4 @@ venv
 logs
 config
 __pycache__
+*.secret
