@@ -18,7 +18,7 @@ def postgres_to_s3():
     cursor = conn.cursor()
     cursor.execute("select * from orders where date <= '20220501'")
     with NamedTemporaryFile(mode="w", suffix="orders") as f:
-    # with open("dags/get_orders.txt", "w") as f:
+        # with open("dags/get_orders.txt", "w") as f:
         csv_writer = csv.writer(f)
         csv_writer.writerow(i[0] for i in cursor.description)
         csv_writer.writerows(cursor)
@@ -32,19 +32,13 @@ def postgres_to_s3():
             filename=f.name,
             key="orders/get_orders.txt",
             bucket_name="airflow",
-            replace=True
+            replace=True,
         )
 
 
 with DAG(
-    dag_id="postgres_hooks",
-    default_args=default_args,
-    start_date=datetime(2023, 10, 11),
-    schedule_interval="@daily"
+    dag_id="postgres_hooks", default_args=default_args, schedule_interval="@daily"
 ) as dag:
-    task_1 = PythonOperator(
-        task_id="postgres_to_s3",
-        python_callable=postgres_to_s3
-    )
+    task_1 = PythonOperator(task_id="postgres_to_s3", python_callable=postgres_to_s3)
 
     task_1

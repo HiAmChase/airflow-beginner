@@ -28,23 +28,16 @@ with DAG(
     default_args=default_args,
     dag_id="python_operator",
     description="Second DAG using python operator",
-    start_date=datetime(2023, 10, 9),
-    schedule_interval='@daily',
-    catchup=False
+    schedule_interval="@daily",
+    catchup=False,
 ):
     task_1 = PythonOperator(
         task_id="greet",
         python_callable=greet,
     )
 
-    task_2 = PythonOperator(
-        task_id="get_name",
-        python_callable=get_name
-    )
+    task_2 = PythonOperator(task_id="get_name", python_callable=get_name)
 
-    task_3 = PythonOperator(
-        task_id="get_age",
-        python_callable=get_age
-    )
+    task_3 = PythonOperator(task_id="get_age", python_callable=get_age)
 
     [task_2, task_3] >> task_1

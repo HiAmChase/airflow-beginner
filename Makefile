@@ -1,10 +1,14 @@
+COMPOSE=docker compose
 AIRFLOW_INIT_SERVICE=airflow-init
-
+AIRFLOW_SERVICES=airflow-webserver airflow-triggerer airflow-scheduler
 init:
-	docker compose up ${AIRFLOW_INIT_SERVICE}
+	${COMPOSE} up ${AIRFLOW_INIT_SERVICE}
 
 run:
-	docker compose up -d
+	${COMPOSE} up -d
 
 stop:
-	docker compose down -v
+	${COMPOSE} stop ${AIRFLOW_SERVICES} ${AIRFLOW_INIT_SERVICE}
+
+purge:
+	${COMPOSE} down -v
